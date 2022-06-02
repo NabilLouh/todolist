@@ -1,6 +1,6 @@
 <template>
   <div>
-    <body>
+    <body >
 
       <section class="todoapp">
 
@@ -15,7 +15,7 @@
         <!-- Cette section devra etre invisible si elle est vide -->
         <section class="main">
 
-          <input id="toggle-all" class="toggle-all" type="checkbox" >
+          <input id="toggle-all" class="toggle-all" type="checkbox" @click="allcheck">
 
           <label for="toggle-all">Mark all as complete</label>
 
@@ -28,12 +28,17 @@
 
 
             <li v-for="(tache, index) in listetache" :key="index" 
-            :class="{completed: tache.etat == true}">
+            :class="{completed: tache.etat == true}"
+            v-show="choix == 'all' || tache.etat == choix">
 
               <div class="view">
 
                 <input class="toggle" type="checkbox" v-model="tache.etat">
-                <label>{{tache.ntache}}</label>
+
+                <label  @dblclick="modiftache" v-if="modification == false">{{tache.ntache}}</label>
+                <input type="text" v-model="tache.ntache" v-else @keyup.enter="modifier()" >
+
+
                 <button class="destroy" @click="this.listetache.splice(index, 1)"></button>
 
               </div>
@@ -55,21 +60,24 @@
 
 
           <!-- Remove this if you don't implement routing -->
-          <ul class="filters">
+         <ul class="filters">
             <li>
-              <a class="selected" href="#/">All</a>
+             <a href="#" @click.prevent="selectionAll"
+             :class="{selected: choix == 'all'}">All</a> 
             </li>
             <li>
-              <a href="#/active">Active</a>
+              <a href="#/active" @click.prevent="selectionActive"
+              :class="{selected: choix == false}">Active</a>
             </li>
             <li>
-              <a href="#/completed">Completed</a>
+              <a href="#/completed" @click.prevent="selectionCompleted"
+              :class="{selected: choix == true}">Completed</a>
             </li>
-          </ul>
+          </ul> 
 
 
           <!-- Hidden if no completed items are left ↓ -->
-          <button class="clear-completed" v-if="this.listetache.length > 0">Clear completed</button>
+          <button class="clear-completed" v-if="this.listetache.length > 0" @click="allclear">Clear completed</button>
 
         </footer>
 
@@ -95,7 +103,9 @@ export default {
       tache: '',
       listetache: [
         
-      ]
+      ],
+      choix: 'all',
+      modification: false,
     }
   }, 
 
@@ -106,6 +116,47 @@ export default {
       console.log(this.listetache)
     },
 
+    allcheck() {
+      for ( let i = 0; i < this.listetache.length; i++) {
+        this.listetache[i].etat = true
+      }
+      
+    },
+    
+    allclear() {
+      var longueur = this.listetache.length
+      console.log(longueur)
+     
+        for ( let i = longueur -1; i >= 0; i--) {
+          console.log(longueur)
+          
+          if(this.listetache[i].etat == true) {
+            this.listetache.splice(i, 1)
+          }
+          
+        }
+    }, 
+
+
+    selectionAll() {
+      this.choix = 'all'
+    },
+
+    selectionActive() {
+      this.choix = false
+    },
+
+    selectionCompleted() {
+      this.choix = true
+    },
+
+    modiftache() {
+      this.modification = true
+    },
+
+    modifier() {
+      this.modification = false
+    }
    
   }
 
