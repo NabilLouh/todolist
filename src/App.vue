@@ -34,7 +34,7 @@
 
                 <input class="toggle" type="checkbox" v-model="tache.etat">
                 <label>{{tache.ntache}}</label>
-                <button class="destroy"></button>
+                <button class="destroy" @click="this.listetache.splice(index, 1)"></button>
 
               </div>
 
@@ -103,7 +103,7 @@ export default {
   methods: {
     ajouter() {
       this.listetache.push({ntache: this.tache, etat: false})
-      console.log(this.listetache.length)
+      console.log(this.listetache)
     },
 
    
