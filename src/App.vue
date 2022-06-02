@@ -7,45 +7,33 @@
         <header class="header">
 
           <h1>todos</h1>
-          <input class="new-todo" placeholder="What needs to be done?" autofocus>
+          <input class="new-todo" placeholder="What needs to be done?" autofocus v-model="tache" @keyup.enter="ajouter()">
 
         </header>
 
 
-        <!-- This section should be hidden by default and shown when there are todos -->
+        <!-- Cette section devra etre invisible si elle est vide -->
         <section class="main">
 
-          <input id="toggle-all" class="toggle-all" type="checkbox">
+          <input id="toggle-all" class="toggle-all" type="checkbox" >
 
           <label for="toggle-all">Mark all as complete</label>
 
 
           <ul class="todo-list">
 
-            <!-- These are here just to show the structure of the list items -->
-            <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-
-            <li class="completed">
-
-              <div class="view">
-
-                <input class="toggle" type="checkbox" checked>
-                <label>Taste JavaScript</label>
-                <button class="destroy"></button>
-
-              </div>
-
-              <input class="edit" value="Create a TodoMVC template">
-
-            </li>
+            
+       
+            <!-- Liste d'item qui aurons la class editing quand elle sont edité et completed quand elle sont marquer comme complete  -->
 
 
-            <li>
+            <li v-for="(tache, index) in listetache" :key="index" 
+            :class="{completed: tache.etat == true}">
 
               <div class="view">
 
-                <input class="toggle" type="checkbox">
-                <label>Buy a unicorn</label>
+                <input class="toggle" type="checkbox" v-model="tache.etat">
+                <label>{{tache.ntache}}</label>
                 <button class="destroy"></button>
 
               </div>
@@ -63,7 +51,7 @@
         <footer class="footer">
 
           <!-- This should be `0 items left` by default -->
-          <span class="todo-count"><strong>0</strong> item left</span>
+          <span class="todo-count"><strong>{{this.listetache.length}}</strong> item left</span>
 
 
           <!-- Remove this if you don't implement routing -->
@@ -81,7 +69,7 @@
 
 
           <!-- Hidden if no completed items are left ↓ -->
-          <button class="clear-completed">Clear completed</button>
+          <button class="clear-completed" v-if="this.listetache.length > 0">Clear completed</button>
 
         </footer>
 
@@ -98,9 +86,32 @@
 export default {
   name: 'App',
   components: {
+    
 
+  }, 
+
+  data() {
+    return {
+      tache: '',
+      listetache: [
+        
+      ]
+    }
+  }, 
+
+
+  methods: {
+    ajouter() {
+      this.listetache.push({ntache: this.tache, etat: false})
+      console.log(this.listetache.length)
+    },
+
+   
   }
+
 }
+
+
 </script>
 
 <style>
