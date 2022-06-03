@@ -1,6 +1,6 @@
 <template>
   <div>
-    <body >
+    <body>
 
       <section class="todoapp">
 
@@ -35,8 +35,8 @@
 
                 <input class="toggle" type="checkbox" v-model="tache.etat">
 
-                <label  @dblclick="modiftache" v-if="modification == false">{{tache.ntache}}</label>
-                <input type="text" v-model="tache.ntache" v-else @keyup.enter="modifier()" >
+                <label  @dblclick="tache.modi = true" v-if="tache.modi == false">{{tache.ntache}}</label>
+                <input type="text" v-model="tache.ntache" v-else @keyup.enter="tache.modi = false">
 
 
                 <button class="destroy" @click="this.listetache.splice(index, 1)"></button>
@@ -112,7 +112,7 @@ export default {
 
   methods: {
     ajouter() {
-      this.listetache.push({ntache: this.tache, etat: false})
+      this.listetache.push({ntache: this.tache, etat: false, modi: false})
       console.log(this.listetache)
     },
 
@@ -150,13 +150,17 @@ export default {
       this.choix = true
     },
 
-    modiftache() {
-      this.modification = true
-    },
+   
 
     modifier() {
-      this.modification = false
-    }
+      this.listetache.modi = false
+      console.log(this.listetache.modi)
+    },
+
+     modiftache() {
+      this.listetache.modi = true
+      console.log(this.listetache.modi)
+    },
    
   }
 
