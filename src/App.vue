@@ -20,38 +20,11 @@
           <label for="toggle-all">Mark all as complete</label>
 
 
-          <ul class="todo-list">
-
-            
-       
-            <!-- Liste d'item qui aurons la class editing quand elle sont edité et completed quand elle sont marquer comme complete  -->
-
-
-            <li v-for="(tache, index) in listetache" :key="index" 
-            :class="{completed: tache.etat == true}"
-            v-show="choix == 'all' || tache.etat == choix">
-
-              <div class="view">
-
-                <input class="toggle" type="checkbox" v-model="tache.etat">
-
-                <label  @dblclick="tache.modi = true" v-if="tache.modi == false">{{tache.ntache}}</label>
-                <input type="text" v-model="tache.ntache" v-else @keyup.enter="tache.modi = false">
-
-
-                <button class="destroy" @click="this.listetache.splice(index, 1)"></button>
-
-              </div>
-
-              <input class="edit" value="Rule the web">
-
-            </li>
-
-          </ul>
+          <XList :listedestache="listetache"  :filtre="choix"/>
 
         </section>
 
-
+        
         <!-- This footer should be hidden by default and shown when there are todos -->
         <footer class="footer">
 
@@ -90,10 +63,12 @@
 
 <script>
 
+import XList from './components/XList.vue'
 
 export default {
   name: 'App',
   components: {
+    XList,
     
 
   }, 
@@ -104,8 +79,9 @@ export default {
       listetache: [
         
       ],
-      choix: 'all',
+      
       modification: false,
+      choix: 'all',
     }
   }, 
 
@@ -149,6 +125,9 @@ export default {
     selectionCompleted() {
       this.choix = true
     },
+
+
+   
 
    
 
